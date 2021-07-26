@@ -17,25 +17,13 @@ package raft
 //   in the same server.
 //
 
-import "sync"
-import "labrpc"
+import (
+	"labrpc"
+	"sync"
+)
 
 // import "bytes"
 // import "encoding/gob"
-
-
-
-//
-// as each Raft peer becomes aware that successive log entries are
-// committed, the peer should send an ApplyMsg to the service (or
-// tester) on the same server, via the applyCh passed to Make().
-//
-type ApplyMsg struct {
-	Index       int
-	Command     interface{}
-	UseSnapshot bool   // ignore for lab2; only used in lab3
-	Snapshot    []byte // ignore for lab2; only used in lab3
-}
 
 //
 // A Go object implementing a single Raft peer.
@@ -46,6 +34,11 @@ type Raft struct {
 	persister *Persister          // Object to hold this peer's persisted state
 	me        int                 // this peer's index into peers[]
 
+	timeout     int
+	votedFor    int
+	leader      int //Id do lider atual
+	currentTerm int //Termo atual
+
 	// Your data here (2A, 2B, 2C).
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
@@ -55,11 +48,201 @@ type Raft struct {
 // return currentTerm and whether this server
 // believes it is the leader.
 func (rf *Raft) GetState() (int, bool) {
-
 	var term int
 	var isleader bool
-	// Your code here (2A).
+
+	isleader = false
+	if rf.me == rf.leader {
+		isleader = true
+	}
+
+	term = rf.currentTerm
+
 	return term, isleader
+}
+
+// example RequestVote RPC arguments structure.
+// field names must start with capital letters!
+//
+
+//passa todos os argumentos do candidato representando um pedido de voto
+type RequestVoteArgs struct {
+	// Request vote RPC
+	cdtTerm int //Termo do candidato pedindo voto
+	cdtID   int //ID do candidato pedindo voto
+}
+
+// example RequestVote RPC reply structure.
+// field names must start with capital letters!
+//
+// passa os argumentos de resposta para um pedido de voto
+type RequestVoteReply struct {
+	currentTerm int //termo atual da eleição
+	voteGranted bool
+}
+
+//heartbeat tem que ser uma estrutura separada, que vai conter as informações de lider
+type HeartbeatArgs struct {
+	leaderID int
+	term     int
+}
+
+//resposta do heartbeat
+type HeartbeatReply struct {
+	term   int
+	sucess bool
+}
+
+//
+// example RequestVote RPC handler.
+// RAFT::REQUESTVOTE
+// Raft.RequestVote(args, reply)
+
+//preenche o request vote reply com as informações sobre o voto (quem votou e se votou)
+func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	/* 	// Preencher a resposta do args com o resultado da eleição.
+	   	if args.cdtTerm < rf.currentTerm {
+	   		args.voteGranted = false          //candidato não pode votar
+	   		args.currentTerm = rf.currentTerm //não pode votar
+	   	} else { // args.cdtTerm >= rf.currentTerm
+	   		if rf.votedFor == -1 || rf.votedFor == args.cdtID {
+	   			args.voteGranted = true // pode votar
+	   			rf.votedFor = args.cdtID
+	   		} else {
+	   			args.voteGranted = false // já votou em outro candidato
+	   		}
+	   	}
+	   	if reply.currentTerm < rf.currentTerm {
+	   		reply.success = false
+	   		reply.currentTerm = rf.currentTerm
+	   	} else {
+	   		reply.success = true
+	   	} */
+
+	// if rf.me == rf.leader {
+	// 	reply.leaderID = rf.me
+	// 	reply.leaderTerm = rf.currentTerm
+	// } else {
+	// 	reply.leaderID = -1
+	// 	reply.leaderTerm = -1
+	// }
+}
+
+//
+// example code to send a RequestVote RPC to a server.
+// server is the index of the target server in rf.peers[].
+// expects RPC arguments in args.
+// fills in *reply with RPC reply, so caller should
+// pass &reply.
+// the types of the args and reply passed to Call() must be
+// the same as the types of the arguments declared in the
+// handler function (including whether they are pointers).
+//
+// The labrpc package simulates a lossy network, in which servers
+// may be unreachable, and in which requests and replies may be lost.
+// Call() sends a request and waits for a reply. If a reply arrives
+// within a timeout interval, Call() returns true; otherwise
+// Call() returns false. Thus Call() may not return for a while.
+// A false return can be caused by a dead server, a live server that
+// can't be reached, a lost request, or a lost reply.
+//
+// Call() is guaranteed to return (perhaps after a delay) *except* if the
+// handler function on the server side does not return.  Thus there
+// is no need to implement your own timeouts around Call().
+//
+// look at the comments in ../labrpc/labrpc.go for more details.
+//
+// if you're having trouble getting RPC to work, check that you've
+// capitalized all field names in structs passed over RPC, and
+// that the caller passes the address of the reply struct with &, not
+// the struct itself.
+//
+
+// so faz um pedido de voto e retorna se deu certo pra um server especifico
+func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
+	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
+	return ok
+}
+
+//Lider envia o heartbeat pra um servidor
+func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatReply) bool {
+	ok := rf.peers[server].Call("Raft.recieveHeartbeat", args, reply)
+	return ok
+}
+
+//atualizar o follower do lider eleito e enviar pro lider a confirmação
+func (rf *Raft) recieveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
+
+}
+
+// the service or tester wants to create a Raft server. the ports
+// of all the Raft servers (including this one) are in peers[]. this
+// server's port is peers[me]. all the servers' peers[] arrays
+// have the same order. persister is a place for this server to
+// save its persistent state, and also initially holds the most
+// recent saved state, if any. applyCh is a channel on which the
+// tester or service expects Raft to send ApplyMsg messages.
+// Make() must return quickly, so it should start goroutines
+// for any long-running work.
+// LOCALHOST:8080 8081 8082
+//peers[0] = 8080 peers[1] = 8081
+
+// precisa setar o timeout de cada peer,
+//contar o tempo, caso atinja algum timeout, enviar os pedidos de voto daquele peer
+//e depois de enviado fazer a contagem de votos e decidir se precisa de uma nova eleição ou não
+//uma vez com um lider eleito
+//a cada ciclo de tempo enviar um heartbeat para todos os seguidores
+func Make(peers []*labrpc.ClientEnd, me int,
+	persister *Persister, applyCh chan ApplyMsg) *Raft {
+	rf := &Raft{}
+	rf.peers = peers
+	rf.persister = persister
+	rf.me = me
+
+	//provisório pra nulo
+	rf.leader = -1
+	rf.currentTerm = 0
+
+	// initialize from state persisted before a crash
+	rf.readPersist(persister.ReadRaftState())
+
+	return rf
+}
+
+//
+// the service using Raft (e.g. a k/v server) wants to start
+// agreement on the next command to be appended to Raft's log. if this
+// server isn't the leader, returns false. otherwise start the
+// agreement and return immediately. there is no guarantee that this
+// command will ever be committed to the Raft log, since the leader
+// may fail or lose an election.
+//
+// the first return value is the index that the command will appear at
+// if it's ever committed. the second return value is the current
+// term. the third return value is true if this server believes it is
+// the leader.
+//
+func (rf *Raft) Start(command interface{}) (int, int, bool) {
+	index := -1
+	term := -1
+	isLeader := true
+
+	// Your code here (2B).
+
+	return index, term, isLeader
+}
+
+//
+// the tester calls Kill() when a Raft instance won't
+// be needed again. you are not required to do anything
+// in Kill(), but it might be convenient to (for example)
+// turn off debug output from this instance.
+//
+func (rf *Raft) Kill() {
+	// Your code here, if desired.
 }
 
 //
@@ -93,124 +276,14 @@ func (rf *Raft) readPersist(data []byte) {
 	}
 }
 
-
-
-
 //
-// example RequestVote RPC arguments structure.
-// field names must start with capital letters!
+// as each Raft peer becomes aware that successive log entries are
+// committed, the peer should send an ApplyMsg to the service (or
+// tester) on the same server, via the applyCh passed to Make().
 //
-type RequestVoteArgs struct {
-	// Your data here (2A, 2B).
-}
-
-//
-// example RequestVote RPC reply structure.
-// field names must start with capital letters!
-//
-type RequestVoteReply struct {
-	// Your data here (2A).
-}
-
-//
-// example RequestVote RPC handler.
-//
-func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
-	// Your code here (2A, 2B).
-}
-
-//
-// example code to send a RequestVote RPC to a server.
-// server is the index of the target server in rf.peers[].
-// expects RPC arguments in args.
-// fills in *reply with RPC reply, so caller should
-// pass &reply.
-// the types of the args and reply passed to Call() must be
-// the same as the types of the arguments declared in the
-// handler function (including whether they are pointers).
-//
-// The labrpc package simulates a lossy network, in which servers
-// may be unreachable, and in which requests and replies may be lost.
-// Call() sends a request and waits for a reply. If a reply arrives
-// within a timeout interval, Call() returns true; otherwise
-// Call() returns false. Thus Call() may not return for a while.
-// A false return can be caused by a dead server, a live server that
-// can't be reached, a lost request, or a lost reply.
-//
-// Call() is guaranteed to return (perhaps after a delay) *except* if the
-// handler function on the server side does not return.  Thus there
-// is no need to implement your own timeouts around Call().
-//
-// look at the comments in ../labrpc/labrpc.go for more details.
-//
-// if you're having trouble getting RPC to work, check that you've
-// capitalized all field names in structs passed over RPC, and
-// that the caller passes the address of the reply struct with &, not
-// the struct itself.
-//
-func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
-	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
-	return ok
-}
-
-
-//
-// the service using Raft (e.g. a k/v server) wants to start
-// agreement on the next command to be appended to Raft's log. if this
-// server isn't the leader, returns false. otherwise start the
-// agreement and return immediately. there is no guarantee that this
-// command will ever be committed to the Raft log, since the leader
-// may fail or lose an election.
-//
-// the first return value is the index that the command will appear at
-// if it's ever committed. the second return value is the current
-// term. the third return value is true if this server believes it is
-// the leader.
-//
-func (rf *Raft) Start(command interface{}) (int, int, bool) {
-	index := -1
-	term := -1
-	isLeader := true
-
-	// Your code here (2B).
-
-
-	return index, term, isLeader
-}
-
-//
-// the tester calls Kill() when a Raft instance won't
-// be needed again. you are not required to do anything
-// in Kill(), but it might be convenient to (for example)
-// turn off debug output from this instance.
-//
-func (rf *Raft) Kill() {
-	// Your code here, if desired.
-}
-
-//
-// the service or tester wants to create a Raft server. the ports
-// of all the Raft servers (including this one) are in peers[]. this
-// server's port is peers[me]. all the servers' peers[] arrays
-// have the same order. persister is a place for this server to
-// save its persistent state, and also initially holds the most
-// recent saved state, if any. applyCh is a channel on which the
-// tester or service expects Raft to send ApplyMsg messages.
-// Make() must return quickly, so it should start goroutines
-// for any long-running work.
-//
-func Make(peers []*labrpc.ClientEnd, me int,
-	persister *Persister, applyCh chan ApplyMsg) *Raft {
-	rf := &Raft{}
-	rf.peers = peers
-	rf.persister = persister
-	rf.me = me
-
-	// Your initialization code here (2A, 2B, 2C).
-
-	// initialize from state persisted before a crash
-	rf.readPersist(persister.ReadRaftState())
-
-
-	return rf
+type ApplyMsg struct {
+	Index       int
+	Command     interface{}
+	UseSnapshot bool   // ignore for lab2; only used in lab3
+	Snapshot    []byte // ignore for lab2; only used in lab3
 }
