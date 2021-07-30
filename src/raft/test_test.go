@@ -8,12 +8,14 @@ package raft
 // test with the original before submitting.
 //
 
-import "testing"
-import "fmt"
-import "time"
-import "math/rand"
-import "sync/atomic"
-import "sync"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+)
 
 // The tester generously allows solutions to complete elections in one second
 // (much more than the paper's range of timeouts).
@@ -56,8 +58,9 @@ func TestReElection2A(t *testing.T) {
 	// if the old leader rejoins, that shouldn't
 	// disturb the old leader.
 	cfg.connect(leader1)
-	leader2 := cfg.checkOneLeader()
 
+	leader2 := cfg.checkOneLeader()
+	fmt.Println("Test (2A): ","leader 1 =  ", leader1,"leader 2 =  ", leader2)
 	// if there's no quorum, no leader should
 	// be elected.
 	cfg.disconnect(leader2)
