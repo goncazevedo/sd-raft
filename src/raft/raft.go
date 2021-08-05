@@ -107,9 +107,10 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	if rf.currentTerm < args.CdtTerm || rf.me == args.CdtID {
+	if rf.currentTerm < args.CdtTerm {
 		rf.setTimeout()
 		rf.currentTerm = args.CdtTerm
+		rf.state = 0
 		rf.votedFor = args.CdtID
 		reply.CurrentTerm = args.CdtTerm
 		reply.VoteGranted = true
@@ -118,7 +119,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 	reply.CurrentTerm = rf.currentTerm
 	reply.VoteGranted = false
-	fmt.Println("termo ", rf.currentTerm, "candidato: ", args.CdtID, "folower: ", args.CdtID, " rejeitou")
+	fmt.Println("termo ", rf.currentTerm, "candidato: ", args.CdtID, "folower: ", rf.me, " rejeitou")
 	return
 }
 
@@ -159,17 +160,14 @@ func (rf *Raft) mandaHeartbeats() bool {
 		reply := HeartbeatReply{}
 		if i != rf.me {
 			rf.sendHeartbeat(i, &args, &reply)
-			if !reply.Sucess {
-
-			}
 		}
 
 	}
 	return Sucess
 }
 
-func (rf *Raft) pedeVotos(server int, results chan bool, wg *sync.WaitGroup) {
-	defer wg.Done()
+func (rf *Raft) pedeVotos(server int, results chan bool) {
+	/* 	defer wg.Done() */
 	reply := RequestVoteReply{}
 	args := RequestVoteArgs{rf.currentTerm, rf.me}
 	rf.sendRequestVote(server, &args, &reply)
@@ -217,15 +215,15 @@ func (rf *Raft) ReceiveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 func (rf *Raft) setTimeout() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
-	segundo := r1.Intn(1)  // 0 -> 1.0
-	ms := r1.Intn(45) + 50 // 0.5 -> 0.95
+	segundo := 0             // 0 -> 1.0
+	ms := r1.Intn(6) + 3// 0.5 -> 0.95
 	tempo, _ := time.ParseDuration(fmt.Sprintf("%d.%ds", segundo, ms))
 	// 0.5 1.5
 	// fmt.Println(rf.me, "timeout: ", tempo)
 	rf.timeout = time.Now().Add(tempo)
 }
 
-func setLeaderTimeout() time.Time {
+func setHeartbeatTimeout() time.Time {
 	tempo, _ := time.ParseDuration("0.100s")
 	return time.Now().Add(tempo)
 }
@@ -248,37 +246,46 @@ func (rf *Raft) eleicao() {
 			if rf.state == 0 || rf.state == 1 {
 				rf.state = 1
 				rf.currentTerm++
-				fmt.Println("Termo atual = ", rf.currentTerm, "Candidato = ", rf.me)
+				fmt.Println("Termo atual = ", rf.currentTerm, "Candidato = ", rf.me, "timeout = ", rf.timeout)
 				// pede os votos de todos os peers paralelalmente, criando go routine
-				votes := 0
-				var wg sync.WaitGroup
+				votes := 1
+				rf.votedFor = rf.me
+
+				/* var wg sync.WaitGroup */
 				results := make(chan bool, len(rf.peers))
-				wg.Add(len(rf.peers))
+				/* wg.Add(len(rf.peers)) */
 				for i := 0; i < len(rf.peers); i++ {
-					go rf.pedeVotos(i, results, &wg)
+					/* rf.pedeVotos(i, results, &wg) */
+					if i != rf.me {
+						rf.pedeVotos(i, results)
+					}
 
 				}
 				// conta os votos de todos os peers paralelalmente, criando go routine
-				wg.Wait()
+				/* wg.Wait() */
+				rf.mu.Lock()
 				close(results)
 				for resposta := range results {
 					if resposta {
 						votes++
 					}
 				}
-				fmt.Println("votos recebidos (", rf.me, "): ", votes, "/", len(rf.peers))
+				fmt.Println("votos recebidos termo(", rf.currentTerm, ") candidato(", rf.me, "): ", votes, "/", len(rf.peers))
 				//ganhou a eleição
-				if votes > len(rf.peers)/2 {
+				if votes > len(rf.peers)/2 && rf.state == 1 {
+					rf.mandaHeartbeats()
+					fmt.Println("me elegi ", rf.me, ") termo ", rf.currentTerm)
 					rf.leader = rf.me
 					rf.state = 2
-					rf.timeout = setLeaderTimeout()
-					rf.mandaHeartbeats()
+					rf.timeout = setHeartbeatTimeout()
 					//empate
 				} else {
 					rf.setTimeout()
 				}
+				rf.mu.Unlock()
 			} else {
 				rf.mandaHeartbeats()
+				rf.timeout = setHeartbeatTimeout()
 			}
 		}
 	}
@@ -301,7 +308,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	//provisório pra nulo
 	rf.leader = -1
 
-	if rf.me == 0 {
+	/* if rf.me == 0 {
 		tempo, _ := time.ParseDuration("0.300s")
 		rf.timeout = time.Now().Add(tempo)
 	}
@@ -312,8 +319,8 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	if rf.me == 2 {
 		tempo, _ := time.ParseDuration("1.200s")
 		rf.timeout = time.Now().Add(tempo)
-	}
-	/* rf.setTimeout() */
+	} */
+	rf.setTimeout()
 
 	go rf.eleicao()
 
@@ -350,7 +357,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 // turn off debug output from this instance.
 //
 func (rf *Raft) Kill() {
-	// Your code here, if desired.
+
 }
 
 //
