@@ -65,7 +65,7 @@ type HeartbeatReply struct {
 	Sucess bool // Se o peer recebeu o heartbeat com sucesso
 }
 
-//Transforma um sgeuidor em candidato e faz o pedido de voto pros seus peers
+//Transforma um seguidor em candidato e faz o pedido de voto pros seus peers
 func (rf *Raft) startElection() {
 	rf.state = 1
 	rf.currentTerm++
@@ -75,7 +75,7 @@ func (rf *Raft) startElection() {
 	fmt.Printf("%d se torna candidato (currentTerm=%d);\n", rf.me, savedCurrentTerm)
 	votesReceived := 1
 
-	// Send RequestVote RPCs to all other servers concurrently.
+	// Manda o requestVote para todos os peers
 	for _, server := range rf.peers {
 		go func(server *labrpc.ClientEnd) {
 			args := RequestVoteArgs{
@@ -100,7 +100,7 @@ func (rf *Raft) startElection() {
 				} else if reply.CurrentTerm == savedCurrentTerm {
 					if reply.VoteGranted {
 						votesReceived += 1
-						if votesReceived*2 > len(rf.peers)+1 {
+						if votesReceived > len(rf.peers)/2 { // (?)
 							// Won the election!
 							fmt.Printf("\nEleição termo %d{\n\tlider: %d\n\tvotos: %d\n}\n\n", savedCurrentTerm, rf.me, votesReceived)
 							rf.startLeader()
@@ -112,7 +112,7 @@ func (rf *Raft) startElection() {
 		}(server)
 	}
 
-	// Run another election timer, in case this election is not successful.
+	// Se a eleição não for bem sucedida, inicia uma nova eleição
 	go rf.runElectionTimer()
 }
 
@@ -189,13 +189,11 @@ func (rf *Raft) ReceiveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 			rf.becomeFollower(args.Term)
 		}
 		rf.timeout = time.Now()
-		// (?) Olhar no código orignal se o timeout é resetado no becomeFollower e depois também
 		reply.Sucess = true
 	}
 
 	reply.Term = rf.currentTerm
 	//fmt.Printf("\t Heartbeat reply de %d: %+v\n", rf.me, *reply)
-	// (?) Vê se o ponteiro da erro no print
 	return
 }
 
@@ -206,11 +204,6 @@ func (rf *Raft) runElectionTimer() {
 	termStarted := rf.currentTerm
 	rf.mu.Unlock()
 	fmt.Printf("%d começou timer (%v), term=%d\n", rf.me, timeoutDuration, termStarted)
-	// This loops until either:
-	// - we discover the election timer is no longer needed, or
-	// - the election timer expires and this rf becomes a candidate
-	// In a follower, this typically keeps running in the background for the
-	// duration of the rf's lifetime.
 	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -218,7 +211,7 @@ func (rf *Raft) runElectionTimer() {
 
 		rf.mu.Lock()
 		if rf.state != 1 && rf.state != 0 {
-			fmt.Printf("durante o timer para iniciar uma eleição o seguidor se elegeu\n") // (?)
+			fmt.Printf("durante o timer para iniciar uma eleição o seguidor se elegeu\n")
 			rf.mu.Unlock()
 			return
 		}
@@ -263,7 +256,7 @@ func (rf *Raft) startLeader() {
 		ticker := time.NewTicker(50 * time.Millisecond)
 		defer ticker.Stop()
 
-		// Send periodic heartbeats, as long as still leader.
+		// A cada tick manda um heartbeat
 		for {
 			rf.mandaHeartbeats()
 			<-ticker.C
