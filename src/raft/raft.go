@@ -72,8 +72,8 @@ func (rf *Raft) startElection() {
 	savedCurrentTerm := rf.currentTerm
 	rf.timeout = time.Now()
 	rf.votedFor = rf.me
-	fmt.Printf("%d se torna candidato (currentTerm=%d);\n", rf.me, savedCurrentTerm)
 	votesReceived := 1
+	fmt.Printf("%d se torna candidato (currentTerm=%d);\n", rf.me, savedCurrentTerm)
 
 	// Manda o requestVote para todos os peers
 	for i := 0; i < len(rf.peers); i++ {
@@ -258,7 +258,7 @@ func (rf *Raft) startLeader() {
 	//fmt.Printf("%d virou lider no termo =%d\n", rf.me, rf.currentTerm)
 	fmt.Printf("Enviando heartbeats para os followers\n")
 	go func() {
-		ticker := time.NewTicker(50 * time.Millisecond)
+		ticker := time.NewTicker(100 * time.Millisecond)
 		defer ticker.Stop()
 
 		// A cada tick manda um heartbeat

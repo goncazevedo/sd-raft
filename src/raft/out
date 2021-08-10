@@ -190,3 +190,758 @@ Test (2A) - 2: END TEST
   ... Passed
 PASS
 ok  	raftmodule/raft	7.006s
+0 começou timer (281ms), term=0
+Test (2A): initial election ...
+2 começou timer (237ms), term=0
+1 começou timer (197ms), term=0
+1 se torna candidato (currentTerm=1);
+1 começou timer (209ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 2 foi atualizado no vote request2 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 2}
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 0}
+2 começou timer (181ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 1
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+0 começou timer (168ms), term=1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o seguidor se elegeu
+  ... Passed
+2 começou timer (175ms), term=0
+1 começou timer (290ms), term=0
+0 começou timer (256ms), term=0
+2 se torna candidato (currentTerm=1);
+2 começou timer (150ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 0}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 1}
+0 começou timer (194ms), term=1
+1 começou timer (211ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 1: election after disconnecting  2
+0 se torna candidato (currentTerm=2);
+0 começou timer (245ms), term=2
+Enviando RequestVote para: args={CdtTerm:2 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:2 CdtID:0}
+RequestVote: &{CdtTerm:2 CdtID:0} [currentTerm=1, votedFor=2]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 2
+	RequestVote reply: {votedFor:0 , currentTerm: 2, id rf: 1}
+	request Vote reply recebida: {CurrentTerm:2 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 2{
+	lider: 0
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+1 começou timer (216ms), term=2
+durante o timer para iniciar uma eleição o termo mudou de 1 para 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 1: END TEST
+2 virou seguidor no termo 2
+2 começou timer (279ms), term=2
+2 virou seguidor no termo 2
+2 começou timer (206ms), term=2
+2 virou seguidor no termo 2
+2 começou timer (237ms), term=2
+Test (2A) - 2: election after disconnecting  0  and 1
+2 se torna candidato (currentTerm=3);
+2 começou timer (213ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+1 se torna candidato (currentTerm=3);
+1 começou timer (178ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+1 se torna candidato (currentTerm=4);
+1 começou timer (205ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+2 se torna candidato (currentTerm=4);
+2 começou timer (253ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+1 se torna candidato (currentTerm=5);
+1 começou timer (152ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+2 se torna candidato (currentTerm=5);
+2 começou timer (163ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+1 se torna candidato (currentTerm=6);
+1 começou timer (277ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+2 se torna candidato (currentTerm=6);
+2 começou timer (187ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+1 se torna candidato (currentTerm=7);
+1 começou timer (286ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+2 se torna candidato (currentTerm=7);
+2 começou timer (240ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+2 se torna candidato (currentTerm=8);
+2 começou timer (257ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+1 se torna candidato (currentTerm=8);
+1 começou timer (232ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+2 se torna candidato (currentTerm=9);
+2 começou timer (171ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+1 se torna candidato (currentTerm=9);
+1 começou timer (202ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+2 se torna candidato (currentTerm=10);
+2 começou timer (252ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+1 se torna candidato (currentTerm=10);
+1 começou timer (260ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+2 se torna candidato (currentTerm=11);
+2 começou timer (262ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+Test (2A) - 2: First check
+1 se torna candidato (currentTerm=11);
+1 começou timer (251ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:1}
+RequestVote: &{CdtTerm:11 CdtID:1} [currentTerm=11, votedFor=2]
+	RequestVote reply: {votedFor:2 , currentTerm: 11, id rf: 2}
+	request Vote reply recebida: {CurrentTerm:11 VoteGranted:false}
+2 se torna candidato (currentTerm=12);
+2 começou timer (201ms), term=12
+Enviando RequestVote para: args={CdtTerm:12 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:12 CdtID:2}
+RequestVote: &{CdtTerm:12 CdtID:2} [currentTerm=11, votedFor=1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 12
+	RequestVote reply: {votedFor:2 , currentTerm: 12, id rf: 1}
+1 começou timer (202ms), term=12
+	request Vote reply recebida: {CurrentTerm:12 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 12{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+durante o timer para iniciar uma eleição o termo mudou de 11 para 12
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 2: Second check, reconnected  1
+0 virou seguidor no termo 12
+0 começou timer (210ms), term=12
+Test (2A) - 2: Third check, reconnected  0
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.006s
+0 começou timer (281ms), term=0
+Test (2A): initial election ...
+2 começou timer (237ms), term=0
+1 começou timer (197ms), term=0
+1 se torna candidato (currentTerm=1);
+1 começou timer (209ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 0}
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 1
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 2 foi atualizado no vote request2 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 2}
+0 começou timer (181ms), term=1
+2 começou timer (168ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o seguidor se elegeu
+  ... Passed
+2 começou timer (175ms), term=0
+0 começou timer (290ms), term=0
+1 começou timer (256ms), term=0
+2 se torna candidato (currentTerm=1);
+2 começou timer (150ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 0}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 1}
+0 começou timer (194ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+1 começou timer (211ms), term=1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 1: election after disconnecting  2
+0 se torna candidato (currentTerm=2);
+0 começou timer (224ms), term=2
+Enviando RequestVote para: args={CdtTerm:2 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:2 CdtID:0}
+RequestVote: &{CdtTerm:2 CdtID:0} [currentTerm=1, votedFor=2]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 2
+	RequestVote reply: {votedFor:0 , currentTerm: 2, id rf: 1}
+1 começou timer (245ms), term=2
+	request Vote reply recebida: {CurrentTerm:2 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 2{
+	lider: 0
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+durante o timer para iniciar uma eleição o termo mudou de 1 para 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 1: END TEST
+2 virou seguidor no termo 2
+2 virou seguidor no termo 2
+2 começou timer (279ms), term=2
+2 começou timer (206ms), term=2
+Test (2A) - 2: election after disconnecting  0  and 1
+2 se torna candidato (currentTerm=3);
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+2 começou timer (244ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+1 se torna candidato (currentTerm=3);
+1 começou timer (297ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+2 se torna candidato (currentTerm=4);
+2 começou timer (250ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+1 se torna candidato (currentTerm=4);
+1 começou timer (251ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+2 se torna candidato (currentTerm=5);
+2 começou timer (296ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+1 se torna candidato (currentTerm=5);
+1 começou timer (294ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+2 se torna candidato (currentTerm=6);
+2 começou timer (191ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+1 se torna candidato (currentTerm=6);
+1 começou timer (278ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+2 se torna candidato (currentTerm=7);
+2 começou timer (252ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+1 se torna candidato (currentTerm=7);
+1 começou timer (165ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+2 se torna candidato (currentTerm=8);
+2 começou timer (240ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+1 se torna candidato (currentTerm=8);
+1 começou timer (234ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+2 se torna candidato (currentTerm=9);
+2 começou timer (279ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+1 se torna candidato (currentTerm=9);
+1 começou timer (231ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+2 se torna candidato (currentTerm=10);
+2 começou timer (199ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+Test (2A) - 2: First check
+1 se torna candidato (currentTerm=10);
+1 começou timer (197ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+RequestVote: &{CdtTerm:10 CdtID:1} [currentTerm=10, votedFor=2]
+	RequestVote reply: {votedFor:2 , currentTerm: 10, id rf: 2}
+	request Vote reply recebida: {CurrentTerm:10 VoteGranted:false}
+2 se torna candidato (currentTerm=11);
+2 começou timer (290ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+RequestVote: &{CdtTerm:11 CdtID:2} [currentTerm=10, votedFor=1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 11
+	RequestVote reply: {votedFor:2 , currentTerm: 11, id rf: 1}
+	request Vote reply recebida: {CurrentTerm:11 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 11{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+1 começou timer (176ms), term=11
+durante o timer para iniciar uma eleição o termo mudou de 10 para 11
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 2: Second check, reconnected  1
+0 virou seguidor no termo 11
+0 começou timer (273ms), term=11
+Test (2A) - 2: Third check, reconnected  0
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.007s
+2 começou timer (237ms), term=0
+1 começou timer (197ms), term=0
+Test (2A): initial election ...
+0 começou timer (281ms), term=0
+1 se torna candidato (currentTerm=1);
+1 começou timer (209ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 0}
+0 começou timer (181ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 1
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 2 foi atualizado no vote request2 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 2}
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+2 começou timer (168ms), term=1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o seguidor se elegeu
+  ... Passed
+0 começou timer (175ms), term=0
+1 começou timer (256ms), term=0
+2 começou timer (290ms), term=0
+0 se torna candidato (currentTerm=1);
+0 começou timer (150ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:0}
+RequestVote: &{CdtTerm:1 CdtID:0} [currentTerm=0, votedFor=-1]
+	Termo de 2 foi atualizado no vote request2 virou seguidor no termo 1
+	RequestVote reply: {votedFor:0 , currentTerm: 1, id rf: 2}
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 0
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+2 começou timer (194ms), term=1
+RequestVote: &{CdtTerm:1 CdtID:0} [currentTerm=0, votedFor=-1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 1
+	RequestVote reply: {votedFor:0 , currentTerm: 1, id rf: 1}
+1 começou timer (211ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+Test (2A) - 1: election after disconnecting  0
+2 se torna candidato (currentTerm=2);
+2 começou timer (224ms), term=2
+Enviando RequestVote para: args={CdtTerm:2 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:2 CdtID:2}
+RequestVote: &{CdtTerm:2 CdtID:2} [currentTerm=1, votedFor=0]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 2
+	RequestVote reply: {votedFor:2 , currentTerm: 2, id rf: 1}
+	request Vote reply recebida: {CurrentTerm:2 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 2{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+1 começou timer (216ms), term=2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+durante o timer para iniciar uma eleição o termo mudou de 1 para 2
+Test (2A) - 1: END TEST
+0 virou seguidor no termo 2
+0 virou seguidor no termo 2
+0 começou timer (279ms), term=2
+0 começou timer (206ms), term=2
+Test (2A) - 2: election after disconnecting  2  and 0
+0 se torna candidato (currentTerm=3);
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:0}
+0 começou timer (213ms), term=3
+1 se torna candidato (currentTerm=3);
+1 começou timer (297ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:1}
+0 se torna candidato (currentTerm=4);
+0 começou timer (250ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:0}
+1 se torna candidato (currentTerm=4);
+1 começou timer (251ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:1}
+0 se torna candidato (currentTerm=5);
+0 começou timer (161ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:0}
+1 se torna candidato (currentTerm=5);
+1 começou timer (152ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:1}
+0 se torna candidato (currentTerm=6);
+0 começou timer (196ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:0}
+1 se torna candidato (currentTerm=6);
+1 começou timer (191ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:1}
+0 se torna candidato (currentTerm=7);
+0 começou timer (278ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:0}
+1 se torna candidato (currentTerm=7);
+1 começou timer (252ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:1}
+0 se torna candidato (currentTerm=8);
+0 começou timer (260ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:0}
+1 se torna candidato (currentTerm=8);
+1 começou timer (253ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:1}
+0 se torna candidato (currentTerm=9);
+0 começou timer (187ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:0}
+1 se torna candidato (currentTerm=9);
+1 começou timer (279ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:1}
+0 se torna candidato (currentTerm=10);
+0 começou timer (231ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:0}
+1 se torna candidato (currentTerm=10);
+1 começou timer (234ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:1}
+0 se torna candidato (currentTerm=11);
+0 começou timer (266ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:0}
+Test (2A) - 2: First check
+1 se torna candidato (currentTerm=11);
+1 começou timer (190ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:1}
+RequestVote: &{CdtTerm:11 CdtID:1} [currentTerm=11, votedFor=0]
+	RequestVote reply: {votedFor:0 , currentTerm: 11, id rf: 0}
+	request Vote reply recebida: {CurrentTerm:11 VoteGranted:false}
+0 se torna candidato (currentTerm=12);
+0 começou timer (283ms), term=12
+Enviando RequestVote para: args={CdtTerm:12 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:12 CdtID:0}
+RequestVote: &{CdtTerm:12 CdtID:0} [currentTerm=11, votedFor=1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 12
+	RequestVote reply: {votedFor:0 , currentTerm: 12, id rf: 1}
+	request Vote reply recebida: {CurrentTerm:12 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 12{
+	lider: 0
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+1 começou timer (202ms), term=12
+durante o timer para iniciar uma eleição o termo mudou de 11 para 12
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 2: Second check, reconnected  0
+2 virou seguidor no termo 12
+2 começou timer (216ms), term=12
+Test (2A) - 2: Third check, reconnected  2
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.009s
+0 começou timer (281ms), term=0
+Test (2A): initial election ...
+2 começou timer (237ms), term=0
+1 começou timer (197ms), term=0
+1 se torna candidato (currentTerm=1);
+1 começou timer (209ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:1}
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 2 foi atualizado no vote request2 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 2}
+2 começou timer (181ms), term=1
+RequestVote: &{CdtTerm:1 CdtID:1} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:1 , currentTerm: 1, id rf: 0}
+0 começou timer (168ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 1
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+  ... Passed
+2 começou timer (175ms), term=0
+0 começou timer (290ms), term=0
+1 começou timer (256ms), term=0
+2 se torna candidato (currentTerm=1);
+2 começou timer (150ms), term=1
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:1 CdtID:2}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 1 foi atualizado no vote request1 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 1}
+RequestVote: &{CdtTerm:1 CdtID:2} [currentTerm=0, votedFor=-1]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 1
+	RequestVote reply: {votedFor:2 , currentTerm: 1, id rf: 0}
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 1{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+1 começou timer (194ms), term=1
+0 começou timer (211ms), term=1
+	request Vote reply recebida: {CurrentTerm:1 VoteGranted:true}
+	enquanto esperava pela resposta, state = 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+durante o timer para iniciar uma eleição o termo mudou de 0 para 1
+Test (2A) - 1: election after disconnecting  2
+1 se torna candidato (currentTerm=2);
+1 começou timer (287ms), term=2
+Enviando RequestVote para: args={CdtTerm:2 CdtID:1}
+Enviando RequestVote para: args={CdtTerm:2 CdtID:1}
+RequestVote: &{CdtTerm:2 CdtID:1} [currentTerm=1, votedFor=2]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 2
+	RequestVote reply: {votedFor:1 , currentTerm: 2, id rf: 0}
+0 começou timer (245ms), term=2
+	request Vote reply recebida: {CurrentTerm:2 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 2{
+	lider: 1
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+durante o timer para iniciar uma eleição o termo mudou de 1 para 2
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 1: END TEST
+2 virou seguidor no termo 2
+2 começou timer (279ms), term=2
+2 virou seguidor no termo 2
+2 virou seguidor no termo 2
+2 começou timer (237ms), term=2
+2 começou timer (206ms), term=2
+Test (2A) - 2: election after disconnecting  1  and 2
+2 se torna candidato (currentTerm=3);
+2 começou timer (213ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:2}
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+durante o timer para iniciar uma eleição o termo mudou de 2 para 3
+0 se torna candidato (currentTerm=3);
+0 começou timer (178ms), term=3
+Enviando RequestVote para: args={CdtTerm:3 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:3 CdtID:0}
+0 se torna candidato (currentTerm=4);
+0 começou timer (205ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:0}
+2 se torna candidato (currentTerm=4);
+2 começou timer (253ms), term=4
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:4 CdtID:2}
+0 se torna candidato (currentTerm=5);
+0 começou timer (152ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:0}
+2 se torna candidato (currentTerm=5);
+2 começou timer (163ms), term=5
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:5 CdtID:2}
+0 se torna candidato (currentTerm=6);
+0 começou timer (170ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:0}
+2 se torna candidato (currentTerm=6);
+2 começou timer (187ms), term=6
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:6 CdtID:2}
+0 se torna candidato (currentTerm=7);
+0 começou timer (191ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:0}
+2 se torna candidato (currentTerm=7);
+2 começou timer (240ms), term=7
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:7 CdtID:2}
+0 se torna candidato (currentTerm=8);
+0 começou timer (225ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:0}
+2 se torna candidato (currentTerm=8);
+2 começou timer (160ms), term=8
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:8 CdtID:2}
+0 se torna candidato (currentTerm=9);
+0 começou timer (247ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:0}
+2 se torna candidato (currentTerm=9);
+2 começou timer (171ms), term=9
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:9 CdtID:2}
+2 se torna candidato (currentTerm=10);
+2 começou timer (286ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:2}
+0 se torna candidato (currentTerm=10);
+0 começou timer (252ms), term=10
+Enviando RequestVote para: args={CdtTerm:10 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:10 CdtID:0}
+0 se torna candidato (currentTerm=11);
+0 começou timer (262ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:0}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:0}
+2 se torna candidato (currentTerm=11);
+2 começou timer (239ms), term=11
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:11 CdtID:2}
+Test (2A) - 2: First check
+2 se torna candidato (currentTerm=12);
+2 começou timer (155ms), term=12
+Enviando RequestVote para: args={CdtTerm:12 CdtID:2}
+Enviando RequestVote para: args={CdtTerm:12 CdtID:2}
+RequestVote: &{CdtTerm:12 CdtID:2} [currentTerm=11, votedFor=0]
+	Termo de 0 foi atualizado no vote request0 virou seguidor no termo 12
+	RequestVote reply: {votedFor:2 , currentTerm: 12, id rf: 0}
+	request Vote reply recebida: {CurrentTerm:12 VoteGranted:true}
+contagem de votos: 2/3 peers
+
+Eleição termo 12{
+	lider: 2
+	votos: 2
+}
+
+Enviando heartbeats para os followers
+0 começou timer (201ms), term=12
+durante o timer para iniciar uma eleição o termo mudou de 11 para 12
+durante o timer para iniciar uma eleição o seguidor se elegeu
+Test (2A) - 2: Second check, reconnected  2
+1 virou seguidor no termo 12
+1 começou timer (240ms), term=12
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.009s
