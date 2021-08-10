@@ -2,7 +2,7 @@ package raft
 
 import (
 	"fmt"
-	"labrpc"
+	"raftmodule/labrpc"
 	"math/rand"
 	"sync"
 	"time"
@@ -76,15 +76,19 @@ func (rf *Raft) startElection() {
 	votesReceived := 1
 
 	// Manda o requestVote para todos os peers
-	for _, server := range rf.peers {
-		go func(server *labrpc.ClientEnd) {
+	for i := 0; i < len(rf.peers); i++ {
+		go func(server int) {
+			if server == rf.me {
+				return
+			}
 			args := RequestVoteArgs{
 				CdtTerm: savedCurrentTerm,
 				CdtID:   rf.me,
 			}
 			var reply RequestVoteReply
 			fmt.Printf("Enviando RequestVote para: args=%+v\n", args)
-			if ok := server.Call("Raft.RequestVote", &args, &reply); ok == true {
+			ok := rf.peers[server].Call("Raft.RequestVote", &args, &reply)
+			if ok == true {
 				rf.mu.Lock()
 				defer rf.mu.Unlock()
 				fmt.Printf("\trequest Vote reply recebida: %+v\n", reply)
@@ -102,6 +106,7 @@ func (rf *Raft) startElection() {
 						votesReceived += 1
 						if votesReceived > len(rf.peers)/2 { // (?)
 							// Won the election!
+							fmt.Printf("contagem de votos: %d/%d peers\n", votesReceived,len(rf.peers))
 							fmt.Printf("\nEleição termo %d{\n\tlider: %d\n\tvotos: %d\n}\n\n", savedCurrentTerm, rf.me, votesReceived)
 							rf.startLeader()
 							return
@@ -109,7 +114,7 @@ func (rf *Raft) startElection() {
 					}
 				}
 			}
-		}(server)
+		}(i)
 	}
 
 	// Se a eleição não for bem sucedida, inicia uma nova eleição
