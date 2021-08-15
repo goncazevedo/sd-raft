@@ -1,7 +1,7 @@
 package raft
 
 import (
-	"fmt"
+	// "fmt"
 	"raftmodule/labrpc"
 	"math/rand"
 	"sync"
@@ -86,19 +86,19 @@ func (rf *Raft) startElection() {
 				CdtID:   rf.me,
 			}
 			var reply RequestVoteReply
-			fmt.Printf("Enviando RequestVote para: args=%+v\n", args)
+			fmt.Printf("Enviando RequestVote para %d: args=%+v\n", i, args)
 			ok := rf.peers[server].Call("Raft.RequestVote", &args, &reply)
 			if ok == true {
 				rf.mu.Lock()
 				defer rf.mu.Unlock()
-				fmt.Printf("\trequest Vote reply recebida: %+v\n", reply)
+				// fmt.Printf("\trequest Vote reply recebida: %+v\n", reply)
 				if rf.state != 1 {
-					fmt.Printf("\tenquanto esperava pela resposta, state = %v\n", rf.state)
+					// fmt.Printf("\tenquanto esperava pela resposta, state = %v\n", rf.state)
 					return
 				}
 
 				if reply.CurrentTerm > savedCurrentTerm {
-					fmt.Println("\tresposta do requestVote indica q o termo está desatualizado")
+					// fmt.Println("\tresposta do requestVote indica q o termo está desatualizado")
 					rf.becomeFollower(reply.CurrentTerm)
 					return
 				} else if reply.CurrentTerm == savedCurrentTerm {
@@ -106,7 +106,7 @@ func (rf *Raft) startElection() {
 						votesReceived += 1
 						if votesReceived > len(rf.peers)/2 { // (?)
 							// Won the election!
-							fmt.Printf("contagem de votos: %d/%d peers\n", votesReceived,len(rf.peers))
+							// fmt.Printf("contagem de votos: %d/%d peers\n", votesReceived,len(rf.peers))
 							fmt.Printf("\nEleição termo %d{\n\tlider: %d\n\tvotos: %d\n}\n\n", savedCurrentTerm, rf.me, votesReceived)
 							rf.startLeader()
 							return
@@ -154,7 +154,7 @@ func (rf *Raft) mandaHeartbeats() {
 	for i := 0; i < len(rf.peers); i++ {
 		args := HeartbeatArgs{rf.me, savedCurrentTerm}
 		reply := HeartbeatReply{}
-		//fmt.Printf("Enviando heartbeat para %d args=%+v\n", i, args)
+		// fmt.Printf("Enviando heartbeat para %d args=%+v\n", i, args)
 		go rf.sendHeartbeat(i, &args, &reply)
 	}
 }
@@ -168,7 +168,7 @@ func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatR
 		defer rf.mu.Unlock()
 		// args.Term == savedCurrentTerm sempre
 		if reply.Term > args.Term {
-			// fmt.Println("A resposta do Heartbeat indica q o termo está desatualizado")
+			// // fmt.Println("A resposta do Heartbeat indica q o termo está desatualizado")
 			rf.becomeFollower(reply.Term)
 		}
 	}
@@ -179,11 +179,11 @@ func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatR
 func (rf *Raft) ReceiveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	// fmt.Printf("Heartbeat args de %d: %+v\n", rf.me, args)
+	// // fmt.Printf("Heartbeat args de %d: %+v\n", rf.me, args)
 
 	// Atualizo o termo dos seguidores para o mesmo do líder se precisar
 	if args.Term > rf.currentTerm {
-		// fmt.Printf("\t Termo de %d foi atualizado ao receber heartbeat", rf.me)
+		// // fmt.Printf("\t Termo de %d foi atualizado ao receber heartbeat", rf.me)
 		rf.becomeFollower(args.Term)
 	}
 
@@ -198,7 +198,7 @@ func (rf *Raft) ReceiveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 	}
 
 	reply.Term = rf.currentTerm
-	//fmt.Printf("\t Heartbeat reply de %d: %+v\n", rf.me, *reply)
+	// fmt.Printf("\t Heartbeat reply de %d: %+v\n", rf.me, *reply)
 	return
 }
 
@@ -216,13 +216,13 @@ func (rf *Raft) runElectionTimer() {
 
 		rf.mu.Lock()
 		if rf.state != 1 && rf.state != 0 {
-			fmt.Printf("durante o timer para iniciar uma eleição o seguidor se elegeu\n")
+			// fmt.Printf("durante o timer para iniciar uma eleição o seguidor se elegeu\n")
 			rf.mu.Unlock()
 			return
 		}
 
 		if termStarted != rf.currentTerm {
-			fmt.Printf("durante o timer para iniciar uma eleição o termo mudou de %d para %d\n", termStarted, rf.currentTerm)
+			// fmt.Printf("durante o timer para iniciar uma eleição o termo mudou de %d para %d\n", termStarted, rf.currentTerm)
 			rf.mu.Unlock()
 			return
 		}
@@ -244,7 +244,7 @@ func (rf *Raft) electionTimeout() time.Duration {
 }
 
 func (rf *Raft) becomeFollower(term int) {
-	fmt.Printf("%d virou seguidor no termo %d\n", rf.me, term)
+	// fmt.Printf("%d virou seguidor no termo %d\n", rf.me, term)
 	rf.state = 0
 	rf.currentTerm = term
 	rf.votedFor = -1
@@ -255,8 +255,8 @@ func (rf *Raft) becomeFollower(term int) {
 
 func (rf *Raft) startLeader() {
 	rf.state = 2
-	//fmt.Printf("%d virou lider no termo =%d\n", rf.me, rf.currentTerm)
-	fmt.Printf("Enviando heartbeats para os followers\n")
+	// fmt.Printf("%d virou lider no termo =%d\n", rf.me, rf.currentTerm)
+	// fmt.Printf("Enviando heartbeats para os followers\n")
 	go func() {
 		ticker := time.NewTicker(100 * time.Millisecond)
 		defer ticker.Stop()

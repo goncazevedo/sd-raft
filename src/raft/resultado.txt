@@ -1,0 +1,129 @@
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  2
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.007s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  2  and 0
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  0
+Test (2A) - 2: Third check, reconnected  2
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.008s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  2
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  0  and 1
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  1
+Test (2A) - 2: Third check, reconnected  0
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.011s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.010s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  2
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.007s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.011s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  2
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.008s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.009s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  1  and 2
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  2
+Test (2A) - 2: Third check, reconnected  1
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.010s
+
+Test (2A): initial election ...
+  ... Passed
+Test (2A) - 1: election after disconnecting  0
+Test (2A) - 1: END TEST
+Test (2A) - 2: election after disconnecting  2  and 0
+Test (2A) - 2: First check
+Test (2A) - 2: Second check, reconnected  0
+Test (2A) - 2: Third check, reconnected  2
+Test (2A) - 2: END TEST
+  ... Passed
+PASS
+ok  	raftmodule/raft	7.010s
