@@ -73,7 +73,7 @@ func (rf *Raft) startElection() {
 	rf.timeout = time.Now()
 	rf.votedFor = rf.me
 	votesReceived := 1
-	fmt.Printf("%d se torna candidato (currentTerm=%d);\n", rf.me, savedCurrentTerm)
+	// fmt.Printf("%d se torna candidato (currentTerm=%d);\n", rf.me, savedCurrentTerm)
 
 	// Manda o requestVote para todos os peers
 	for i := 0; i < len(rf.peers); i++ {
@@ -86,7 +86,7 @@ func (rf *Raft) startElection() {
 				CdtID:   rf.me,
 			}
 			var reply RequestVoteReply
-			fmt.Printf("Enviando RequestVote para %d: args=%+v\n", i, args)
+			// fmt.Printf("Enviando RequestVote para %d: args=%+v\n", i, args)
 			ok := rf.peers[server].Call("Raft.RequestVote", &args, &reply)
 			if ok == true {
 				rf.mu.Lock()
@@ -107,7 +107,7 @@ func (rf *Raft) startElection() {
 						if votesReceived > len(rf.peers)/2 { // (?)
 							// Won the election!
 							// fmt.Printf("contagem de votos: %d/%d peers\n", votesReceived,len(rf.peers))
-							fmt.Printf("\nEleição termo %d{\n\tlider: %d\n\tvotos: %d\n}\n\n", savedCurrentTerm, rf.me, votesReceived)
+							// fmt.Printf("\nEleição termo %d{\n\tlider: %d\n\tvotos: %d\n}\n\n", savedCurrentTerm, rf.me, votesReceived)
 							rf.startLeader()
 							return
 						}
@@ -126,10 +126,10 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	fmt.Printf("RequestVote: %+v [currentTerm=%d, votedFor=%d]\n", args, rf.currentTerm, rf.votedFor)
+	// fmt.Printf("RequestVote: %+v [currentTerm=%d, votedFor=%d]\n", args, rf.currentTerm, rf.votedFor)
 
 	if args.CdtTerm > rf.currentTerm {
-		fmt.Printf("\tTermo de %d foi atualizado no vote request", rf.me)
+		// fmt.Printf("\tTermo de %d foi atualizado no vote request", rf.me)
 		rf.becomeFollower(args.CdtTerm)
 	}
 
@@ -142,7 +142,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	reply.CurrentTerm = rf.currentTerm
-	fmt.Printf("\tRequestVote reply: {votedFor:%d , currentTerm: %d, id rf: %d}\n", rf.votedFor, rf.currentTerm, rf.me)
+	// fmt.Printf("\tRequestVote reply: {votedFor:%d , currentTerm: %d, id rf: %d}\n", rf.votedFor, rf.currentTerm, rf.me)
 	return
 }
 
@@ -168,7 +168,7 @@ func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatR
 		defer rf.mu.Unlock()
 		// args.Term == savedCurrentTerm sempre
 		if reply.Term > args.Term {
-			// // fmt.Println("A resposta do Heartbeat indica q o termo está desatualizado")
+			// fmt.Println("A resposta do Heartbeat indica q o termo está desatualizado")
 			rf.becomeFollower(reply.Term)
 		}
 	}
@@ -179,11 +179,11 @@ func (rf *Raft) sendHeartbeat(server int, args *HeartbeatArgs, reply *HeartbeatR
 func (rf *Raft) ReceiveHeartbeat(args *HeartbeatArgs, reply *HeartbeatReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	// // fmt.Printf("Heartbeat args de %d: %+v\n", rf.me, args)
+	// fmt.Printf("Heartbeat args de %d: %+v\n", rf.me, args)
 
 	// Atualizo o termo dos seguidores para o mesmo do líder se precisar
 	if args.Term > rf.currentTerm {
-		// // fmt.Printf("\t Termo de %d foi atualizado ao receber heartbeat", rf.me)
+		// fmt.Printf("\t Termo de %d foi atualizado ao receber heartbeat", rf.me)
 		rf.becomeFollower(args.Term)
 	}
 
@@ -208,7 +208,7 @@ func (rf *Raft) runElectionTimer() {
 	rf.mu.Lock()
 	termStarted := rf.currentTerm
 	rf.mu.Unlock()
-	fmt.Printf("%d começou timer (%v), term=%d\n", rf.me, timeoutDuration, termStarted)
+	// fmt.Printf("%d começou timer (%v), term=%d\n", rf.me, timeoutDuration, termStarted)
 	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 	for {
